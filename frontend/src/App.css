@@ -13,66 +13,74 @@ body,
     position: relative;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
 
 .map-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    flex: 1;
+    position: relative;
     z-index: 1;
 }
 
 .sidebar {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 350px;
-    max-height: calc(100vh - 40px);
+    position: relative;
+    width: 100%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    overflow-y: auto;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 20px;
+    overflow-x: auto;
+    flex-wrap: wrap;
 }
 
 h1 {
-    margin: 0 0 10px 0;
-    font-size: 24px;
+    margin: 0;
+    font-size: 20px;
     color: #1a1a1a;
+    white-space: nowrap;
 }
 
 .control-group {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 h2 {
     margin: 0;
-    font-size: 16px;
+    font-size: 11px;
     color: #666;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 input,
 textarea {
-    width: 100%;
-    padding: 12px;
+    padding: 8px 12px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     transition: border-color 0.2s;
     box-sizing: border-box;
     font-family: inherit;
+}
+
+input[type="text"] {
+    width: 150px;
+}
+
+textarea {
+    width: 200px;
+    height: 60px;
+    resize: none;
 }
 
 input:focus,
@@ -81,20 +89,17 @@ textarea:focus {
     border-color: #007bff;
 }
 
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
 button {
     background: #007bff;
     color: white;
     border: none;
-    padding: 12px;
+    padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 13px;
     transition: background 0.2s;
+    white-space: nowrap;
 }
 
 button:hover {
@@ -115,30 +120,17 @@ button:disabled {
     border: 1px solid #fecaca;
 }
 
-/* Scrollbar styling */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
 
-.sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
-}
 
 .file-input {
-    padding: 8px !important;
-    font-size: 13px;
+    padding: 6px !important;
+    font-size: 12px;
     cursor: pointer;
+    width: auto;
 }
 
 .help-text {
-    margin: 5px 0 0 0;
-    font-size: 12px;
-    color: #666;
+    display: none;
 }
 
 .export-btn {
@@ -149,6 +141,14 @@ button:disabled {
     background: #218838;
 }
 
+.clear-btn {
+    background: #dc3545;
+}
+
+.clear-btn:hover {
+    background: #c82333;
+}
+
 .progress {
     background: #e3f2fd;
     color: #1976d2;
@@ -157,4 +157,59 @@ button:disabled {
     font-size: 14px;
     border: 1px solid #bbdefb;
     text-align: center;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    color: #1a1a1a;
+    text-transform: none;
+}
+
+.bulk-textarea {
+    width: 100% !important;
+    min-height: 300px !important;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    flex: 1;
+}
+
+.cancel-btn {
+    background: #6c757d;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
 }

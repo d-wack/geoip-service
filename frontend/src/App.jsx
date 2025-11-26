@@ -10,6 +10,7 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
+  const [showBulkModal, setShowBulkModal] = useState(false);
 
   const handleSingleLookup = async () => {
     if (!ipInput) return;
@@ -36,6 +37,7 @@ function App() {
     if (!bulkInput) return;
     setLoading(true);
     setError(null);
+    setShowBulkModal(false);
     try {
       // Split by newlines or commas and clean up
       const ips = bulkInput.split(/[\n,]+/).map(ip => ip.trim()).filter(ip => ip);
@@ -118,6 +120,14 @@ function App() {
     window.URL.revokeObjectURL(url);
   };
 
+  const handleClear = () => {
+    setIpInput('');
+    setBulkInput('');
+    setLocations([]);
+    setError(null);
+    setProgress('');
+  };
+
   return (
     <div className="app-container">
       <div className="sidebar">
@@ -135,17 +145,8 @@ function App() {
           <button onClick={handleSingleLookup} disabled={loading}>
             {loading ? 'Searching...' : 'Lookup'}
           </button>
-        </div>
-
-        <div className="control-group">
-          <h2>Bulk Lookup</h2>
-          <textarea
-            value={bulkInput}
-            onChange={(e) => setBulkInput(e.target.value)}
-            placeholder="Enter IPs (one per line, max 100)"
-          />
-          <button onClick={handleBulkLookup} disabled={loading}>
-            {loading ? 'Processing...' : 'Bulk Lookup'}
+          <button onClick={() => setShowBulkModal(true)} disabled={loading}>
+            Bulk Lookup
           </button>
         </div>
 
@@ -158,20 +159,44 @@ function App() {
             disabled={loading}
             className="file-input"
           />
-          <p className="help-text">Upload a CSV file with IP addresses (max 100)</p>
         </div>
-
-        {locations.length > 0 && (
-          <div className="control-group">
-            <button onClick={handleExportCSV} className="export-btn">
-              Export Results as CSV ({locations.length} locations)
-            </button>
-          </div>
-        )}
 
         {progress && <div className="progress">{progress}</div>}
         {error && <div className="error">{error}</div>}
+
+        <button onClick={handleClear} className="clear-btn">
+          Clear All
+        </button>
+
+        {locations.length > 0 && (
+          <button onClick={handleExportCSV} className="export-btn">
+            Export CSV ({locations.length})
+          </button>
+        )}
       </div>
+
+      {showBulkModal && (
+        <div className="modal-overlay" onClick={() => setShowBulkModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Bulk IP Lookup</h2>
+            <textarea
+              value={bulkInput}
+              onChange={(e) => setBulkInput(e.target.value)}
+              placeholder="Enter IPs (one per line or comma separated, max 100)"
+              rows="15"
+              className="bulk-textarea"
+            />
+            <div className="modal-actions">
+              <button onClick={handleBulkLookup} disabled={loading}>
+                Process IPs
+              </button>
+              <button onClick={() => setShowBulkModal(false)} className="cancel-btn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="map-container">
         <MapComponent locations={locations} />
